@@ -159,4 +159,4 @@ const fileExtension = path.extname(file.originalname);
 
 ### Step 7: 문제 해결 및 공유
 
-근본 원인이 파악되었다면 문제 해결의 우선순위를 정하고 제로 문제를 해결해보세요.
+근본 원인이 파악되었다면 문제 해결의 우선순위를 정하고 문제를 해결해보세요.
