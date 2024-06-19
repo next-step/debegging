@@ -55,6 +55,7 @@ npm install
 - 다음은 파일 업로드를 처리하는 간단한 Express 서버의 기본 코드입니다.
 
 ```jsx
+// app.js
 const express = require("express");
 const multer = require("multer");
 const app = express();
