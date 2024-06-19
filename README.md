@@ -24,8 +24,7 @@
 ## 1. 개발 환경 설정
 
 ### 1. Node.js 설치
-
-- Node.js 공식 웹사이트([https://nodejs.org)에서](https://nodejs.xn--org)-ej5r32t/) 안정화 버전을 다운로드하여 설치합니다.
+- Node.js 공식 웹사이트([https://nodejs.org](https://nodejs.org))에서 안정화 버전을 다운로드하여 설치합니다.
 
 ### 2. nodemon 설치
 
