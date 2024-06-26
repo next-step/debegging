@@ -41,7 +41,7 @@ npm install -g nodemon
 터미널에서 다음 명령어를 실행하여 프로젝트를 클론합니다.
 
 ```bash
-git clone https://github.com/next-step/debegging
+git clone https://github.com/next-step/debugging
 ```
 
 터미널에서 다음 명령어를 실행하여 프로젝트의 의존성을 설치합니다.
