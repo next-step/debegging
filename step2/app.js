@@ -1,40 +1,40 @@
 const express = require("express");
 const multer = require("multer");
-const cors = require("cors");
+const path = require("path");
 
 const app = express();
-const upload = multer({ dest: "uploads/" });
 
-app.use(cors());
+// 파일 저장 방식 정의
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/"); // 파일 저장 경로
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); // 원본 파일명 유지
+  },
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 2 * 1024 * 1024 },
+}).array("files", 10); // 최대 10개의 파일 업로드 허용
 
 app.use(express.static("public"));
 app.use(express.json());
 
-let uploadedBytes = 0;
+app.post("/upload", (req, res) => {
+  upload(req, res, (err) => {
+    const uploadedFiles = req.files.map((file) => ({
+      fileName: file.originalname,
+      filePath: file.path,
+      fileSize: file.size,
+    }));
 
-// /upload: 파일 업로드를 처리하는 엔드포인트입니다.
-app.post("/upload", upload.single("file"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).send("No file uploaded.");
-  }
-
-  res.json({
-    message: "File uploaded successfully.",
-    fileSize: req.file.size,
+    res.json({
+      message: "Files uploaded successfully.",
+      files: uploadedFiles,
+    });
   });
-});
-
-// /progress: 현재까지 업로드된 파일 크기를 반환하는 엔드포인트입니다.
-app.post("/progress", (req, res) => {
-  const { chunkSize } = req.body;
-  uploadedBytes += parseInt(chunkSize, 10);
-  res.json({ uploadedBytes });
-});
-
-// /reset: 업로드된 파일 크기를 초기화하는 엔드포인트입니다.
-app.get("/reset", (req, res) => {
-  uploadedBytes = 0;
-  res.send("Upload progress reset");
 });
 
 app.listen(3000, () => {

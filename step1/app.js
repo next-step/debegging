@@ -4,11 +4,19 @@ const path = require("path");
 const fs = require("fs");
 
 const app = express();
-const upload = multer({ dest: "uploads/" });
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/"); // 파일 저장 경로
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); // 원본 파일명 유지
+  },
+});
+
+const upload = multer({ storage: storage });
 
 app.use(express.static("public"));
-
-let uploadedBytes = 0;
 
 app.post("/upload", upload.single("file"), (req, res) => {
   if (!req.file) {
@@ -17,19 +25,10 @@ app.post("/upload", upload.single("file"), (req, res) => {
 
   res.json({
     message: "File uploaded successfully.",
+    fileName: req.file.originalname,
+    filePath: req.file.path,
     fileSize: req.file.size,
   });
-});
-
-app.post("/progress", (req, res) => {
-  const { chunkSize } = req.body;
-  uploadedBytes += parseInt(chunkSize, 10);
-  res.json({ uploadedBytes });
-});
-
-app.get("/reset", (req, res) => {
-  uploadedBytes = 0;
-  res.send("Upload progress reset");
 });
 
 app.listen(3000, () => {
